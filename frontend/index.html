@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>DriveX | Personal Cloud Storage & File Sharing Platform</title>
+  <!-- Google Fonts & Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Animated gradient background overlay -->
+  <div class="bg-gradient"></div>
+
+  <!-- Main App Container -->
+  <div class="app-wrapper">
+    <!-- Header Section -->
+    <header class="glass-header">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <span class="logo-text">DriveX</span>
+      </div>
+
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search files...">
+      </div>
+
+      <div class="header-actions">
+        <button class="btn-primary" id="uploadBtnHeader">
+          <i class="fas fa-plus-circle"></i> Upload File
+        </button>
+        <button class="btn-icon mobile-menu-btn" id="mobileMenuBtn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Dashboard Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card glass-card">
+        <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+        <div class="stat-info">
+          <h4>Total Files</h4>
+          <div class="stat-number" id="totalFilesCount">0</div>
+        </div>
+      </div>
+      <div class="stat-card glass-card">
+        <div class="stat-icon"><i class="fas fa-database"></i></div>
+        <div class="stat-info">
+          <h4>Storage Used</h4>
+          <div class="stat-number" id="storageUsed">0 MB</div>
+        </div>
+      </div>
+      <div class="stat-card glass-card">
+        <div class="stat-icon"><i class="fas fa-share-alt"></i></div>
+        <div class="stat-info">
+          <h4>Shared Files</h4>
+          <div class="stat-number" id="sharedFilesCount">0</div>
+        </div>
+      </div>
+      <div class="stat-card glass-card">
+        <div class="stat-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+        <div class="stat-info">
+          <h4>Available Storage</h4>
+          <div class="stat-number" id="availableStorage">2 GB</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Storage Progress Section -->
+    <div class="storage-section glass-card">
+      <div class="storage-header">
+        <h3><i class="fas fa-chart-line"></i> Storage Overview</h3>
+        <span id="storagePercentage">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-fill" id="storageProgressFill"></div>
+      </div>
+      <div class="storage-meta">
+        <span><i class="fas fa-hdd"></i> Used: <strong id="usedStorageDetail">0 MB</strong></span>
+        <span><i class="fas fa-cloud"></i> Available: <strong id="availableStorageDetail">2 GB</strong></span>
+      </div>
+    </div>
+
+    <!-- Controls: Sorting & Filtering -->
+    <div class="controls-bar">
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all"><i class="fas fa-th-large"></i> All Files</button>
+        <button class="filter-btn" data-filter="document"><i class="fas fa-file-alt"></i> Documents</button>
+        <button class="filter-btn" data-filter="image"><i class="fas fa-image"></i> Images</button>
+        <button class="filter-btn" data-filter="video"><i class="fas fa-video"></i> Videos</button>
+        <button class="filter-btn" data-filter="archive"><i class="fas fa-archive"></i> Archives</button>
+        <button class="filter-btn" data-filter="other"><i class="fas fa-file"></i> Other</button>
+      </div>
+      <div class="sort-group">
+        <span>Sort by:</span>
+        <select id="sortSelect">
+          <option value="name">Name</option>
+          <option value="date">Date</option>
+          <option value="size">Size</option>
+          <option value="type">Type</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Drag & Drop Zone + File Grid -->
+    <div class="drag-drop-zone" id="dragDropZone">
+      <div class="drop-message">
+        <i class="fas fa-cloud-upload-alt fa-3x"></i>
+        <p>Drag & drop files here or click upload</p>
+        <button class="btn-secondary" id="uploadBtnDrop"><i class="fas fa-folder-open"></i> Browse Files</button>
+      </div>
+      <input type="file" id="fileInput" multiple style="display: none;">
+    </div>
+
+    <!-- File Grid Container -->
+    <div class="files-grid" id="filesGrid">
+      <!-- Empty state (will be shown via JS if no files) -->
+    </div>
+  </div>
+
+  <!-- Modals: Share, Rename, Details, Delete Confirm -->
+  <div id="shareModal" class="modal glass-card">
+    <div class="modal-content">
+      <span class="close-modal" data-modal="shareModal">&times;</span>
+      <h3><i class="fas fa-share-alt"></i> Share File</h3>
+      <p>Shareable link:</p>
+      <div class="share-link-container">
+        <input type="text" id="shareLinkInput" readonly>
+        <button id="copyLinkBtn"><i class="fas fa-copy"></i> Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="renameModal" class="modal glass-card">
+    <div class="modal-content">
+      <span class="close-modal" data-modal="renameModal">&times;</span>
+      <h3><i class="fas fa-pen"></i> Rename File</h3>
+      <input type="text" id="renameInput" placeholder="New file name">
+      <button id="confirmRenameBtn" class="btn-primary">Save</button>
+    </div>
+  </div>
+
+  <div id="detailsModal" class="modal glass-card">
+    <div class="modal-content">
+      <span class="close-modal" data-modal="detailsModal">&times;</span>
+      <h3><i class="fas fa-info-circle"></i> File Details</h3>
+      <div class="details-list">
+        <p><strong>Name:</strong> <span id="detailName"></span></p>
+        <p><strong>Type:</strong> <span id="detailType"></span></p>
+        <p><strong>Size:</strong> <span id="detailSize"></span></p>
+        <p><strong>Upload Date:</strong> <span id="detailUploadDate"></span></p>
+        <p><strong>Last Modified:</strong> <span id="detailModified"></span></p>
+        <p><strong>Share Status:</strong> <span id="detailShareStatus">Not shared</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirmModal" class="modal glass-card">
+    <div class="modal-content">
+      <span class="close-modal" data-modal="confirmModal">&times;</span>
+      <h3><i class="fas fa-trash-alt"></i> Confirm Delete</h3>
+      <p>Are you sure you want to delete this file?</p>
+      <div class="confirm-actions">
+        <button id="confirmDeleteBtn" class="btn-danger">Delete</button>
+        <button class="btn-secondary close-confirm">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications Container -->
+  <div id="toastContainer"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
