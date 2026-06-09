@@ -41,9 +41,9 @@ function getFileIcon(fileType) {
 // Update dashboard stats & storage
 function updateStats() {
     const totalFiles = files.length;
-    const totalSize = files.reduce((sum, f) => sum + f.size, 0);
+    const git add .totalSize = files.reduce((sum, f) => sum + f.size, 0);
     const sharedCount = files.filter(f => f.shared === true).length;
-    const maxStorage = 2 * 1024 * 1024 * 1024; // 2GB mock
+    const maxStorage = 1000 * 1024 * 1024 * 1024; // 1TB mock
     const usedPercent = (totalSize / maxStorage) * 100;
     const available = maxStorage - totalSize;
 
@@ -171,7 +171,7 @@ function addFiles(fileList) {
 function downloadFileById(id) {
 
     window.open(
-        `http://localhost:5000/download/${id}`,
+        `http://13.207.200.134:5000/download/${id}`,
         "_blank"
     );
 
@@ -184,7 +184,7 @@ function openShareModal(fileId) {
     if (!file) return;
     currentShareFileId = fileId;
     const shareLink =
-`http://localhost:5000/share/${file.id}`;
+`http://13.207.200.134:5000/share/${file.id}`;
     document.getElementById('shareLinkInput').value = shareLink;
     document.getElementById('shareModal').classList.add('show');
 }
@@ -219,7 +219,7 @@ document.getElementById('confirmRenameBtn').addEventListener('click', async () =
     try {
 
         await fetch(
-            `http://localhost:5000/files/${currentRenameFileId}`,
+            `http://13.207.200.134:5000/files/${currentRenameFileId}`,
             {
                 method: "PUT",
                 headers: {
@@ -268,7 +268,7 @@ document.getElementById('confirmDeleteBtn').addEventListener('click', async () =
     try {
 
         await fetch(
-            `http://localhost:5000/files/${currentDeleteFileId}`,
+            `http://13.207.200.134:5000/files/${currentDeleteFileId}`,
             {
                 method: "DELETE"
             }
@@ -412,7 +412,7 @@ document.getElementById('fileInput').addEventListener('change', async (e) => {
         try {
 
             const response = await fetch(
-                "http://localhost:5000/upload",
+                "http://13.207.200.134:5000/upload",
                 {
                     method: "POST",
                     body: formData
@@ -473,7 +473,7 @@ async function loadFiles() {
     try {
 
         const response = await fetch(
-            "http://localhost:5000/files"
+            "http://13.207.200.134:5000/files"
         );
 
         const data = await response.json();
