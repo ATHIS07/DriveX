@@ -41,9 +41,9 @@ function getFileIcon(fileType) {
 // Update dashboard stats & storage
 function updateStats() {
     const totalFiles = files.length;
-    const git add .totalSize = files.reduce((sum, f) => sum + f.size, 0);
+    const totalSize = files.reduce((sum, f) => sum + f.size, 0);
     const sharedCount = files.filter(f => f.shared === true).length;
-    const maxStorage = 1000 * 1024 * 1024 * 1024; // 1TB mock
+    const maxStorage = 20 * 1024 * 1024 * 1024; // 20GB mock
     const usedPercent = (totalSize / maxStorage) * 100;
     const available = maxStorage - totalSize;
 
